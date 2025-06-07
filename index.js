@@ -29,6 +29,29 @@ app.post("/add-task", (req, res) => {
     });
 });
 
+app.get("/", (req, res) => {
+    const selectAllData = "SELECT * FROM tasks";
 
+    client.query(selectAllData, (err, result) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(result.rows);
+        }
+    });
+});
+
+app.get("/get-taks/:id", (req, res) => {
+    const id = req.params.id;
+    const selectTask = "SELECT * FROM tasks WHERE id = $1"
+
+    client.query(selectTask, [id], (err, result) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(result.rows[0]);
+        }
+    });
+});
 
 app.listen(port, () => console.log(`The app is running on http://localhost:${port}`));
