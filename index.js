@@ -54,4 +54,18 @@ app.get("/get-taks/:id", (req, res) => {
     });
 });
 
+app.put("/update-task/:id", (req, res) => {
+    const id = req.params.id;
+    const task = req.body.task;
+    const updateTask = "UPDATE tasks SET task = $1 WHERE id = $2";
+
+    client.query(updateTask, [task, id], (err, result) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send("TASK UPDATED");
+        }
+    });
+});
+
 app.listen(port, () => console.log(`The app is running on http://localhost:${port}`));
