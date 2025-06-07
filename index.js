@@ -18,9 +18,9 @@ client.connect().then(() => console.log("CONNECTED"));
 app.use(express.json());
 app.post("/add-task", (req, res) => {
     const {creator, task} = req.body;
-    const insertQuery = "INSERT INTO tasks (creator, task) VALUES ($1, $2)"
+    const insertTask = "INSERT INTO tasks (creator, task) VALUES ($1, $2)"
 
-    client.query(insertQuery, [creator, task], (err, result) => {
+    client.query(insertTask, [creator, task], (err, result) => {
         if (err) {
             res.send(err);
         } else {
@@ -30,7 +30,7 @@ app.post("/add-task", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    const selectAllData = "SELECT * FROM tasks";
+    const selectAllData = "SELECT * FROM tasks ORDER BY id";
 
     client.query(selectAllData, (err, result) => {
         if (err) {
@@ -64,6 +64,19 @@ app.put("/update-task/:id", (req, res) => {
             res.send(err);
         } else {
             res.send("TASK UPDATED");
+        }
+    });
+});
+
+app.delete("/delete-task/:id", (req, res) => {
+    const id = req.params.id;
+    const deleteTask = "DELETE FROM tasks WHERE id = $1";
+
+    client.query(deleteTask, [id], (err, result) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send("TASK DELETED");
         }
     });
 });
