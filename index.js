@@ -18,16 +18,17 @@ client.connect().then(() => console.log("CONNECTED"));
 app.use(express.json());
 app.post("/add-task", (req, res) => {
     const {creator, task} = req.body;
-    const insertQuery = "INSERT INTO todo (creator, task) VALUES ($1, $2)"
+    const insertQuery = "INSERT INTO tasks (creator, task) VALUES ($1, $2)"
 
     client.query(insertQuery, [creator, task], (err, result) => {
         if (err) {
             res.send(err);
         } else {
-            res.send(result);
+            res.send("ADDED DATA");
         }
     });
-
 });
+
+
 
 app.listen(port, () => console.log(`The app is running on http://localhost:${port}`));
